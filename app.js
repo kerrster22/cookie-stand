@@ -1,3 +1,7 @@
+function randomNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 const hours = [
   "6am",
   "7am",
@@ -15,111 +19,80 @@ const hours = [
   "7pm",
 ];
 
-const seattle = {
-  name: "Seattle",
-  minCust: 23,
-  maxCust: 65,
-  avgSale: 6.3,
-  custPerHour: [],
-  getCustPerHour: function () {
-    for (let i = 0; i < hours.length; i++) {
-      let numCusts = randomNum(this.minCust, this.maxCust);
-      this.custPerHour.push(numCusts);
-    }
-  },
+function CookieStore(name, minCust, maxCust, avgSale) {
+  this.name = name;
+  this.minCust = minCust;
+  this.maxCust = maxCust;
+  this.avgSale = avgSale;
+  this.custPerHour = [];
+  this.cookiesPerHour = [];
+}
+/*CookieStore.prototype.total = function () {
+  for (let i = 0; i < hours.length; i++) {
+    let total = plus(this.cookiesPerHour + this.total);
+    this.total.push(total);
+  }
+;*/
+
+CookieStore.prototype.calcCustPerHour = function () {
+  for (let i = 0; i < hours.length; i++) {
+    let numCust = randomNum(this.minCust, this.maxCust);
+    this.custPerHour.push(numCust);
+  }
 };
 
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-seattle.getCustPerHour();
-console.log(seattle);
-
-const Tokyo = {
-  name: "Tokyo",
-  minCust: 3,
-  maxCust: 24,
-  avgSale: 1.2,
-  custPerHour: [],
-  getCustPerHour: function () {
-    for (let i = 0; i < hours.length; i++);
-    let numCusts = randomNum(this.minCust, this.maxCust);
-    this.custPerHour.push(numCusts);
-  },
+CookieStore.prototype.calcCookiesPerHour = function () {
+  for (let i = 0; i < this.custPerHour.length; i++) {
+    let cookiesSold = Math.floor(this.custPerHour[i] * this.avgSale);
+    this.cookiesPerHour.push(cookiesSold);
+  }
 };
 
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+CookieStore.prototype.render = function () {
+  this.calcCustPerHour();
+  this.calcCookiesPerHour();
 
-Tokyo.getCustPerHour();
-console.log(Tokyo);
+  const table = document.getElementById("myTable");
 
-const Dubai = {
-  name: "Dubai",
-  minCust: 11,
-  maxCust: 38,
-  avgSale: 3.7,
-  custPerHour: [],
-  getCustPerHour: function () {
-    for (let i = 0; i < hours.length; i++);
-    let numCusts = randomNum(this.minCust, this.maxCust);
-    this.custPerHour.push(numCusts);
-  },
+  const tr = document.createElement("tr");
+  table.appendChild(tr);
+
+  let td = document.createElement("td");
+  td.textContent = this.name;
+  tr.appendChild(td);
+
+  for (let i = 0; i < this.cookiesPerHour.length; i++) {
+    td = document.createElement("td");
+    td.textContent = this.cookiesPerHour[i];
+    tr.appendChild(td);
+  }
 };
 
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+function makeHeaderRow() {
+  const table = document.getElementById("myTable");
+
+  const tr = document.createElement("tr");
+  table.appendChild(tr);
+
+  let th = document.createElement("th");
+  tr.appendChild(th);
+
+  for (let i = 0; i < hours.length; i++) {
+    th = document.createElement("th");
+    th.textContent = hours[i];
+    tr.appendChild(th);
+  }
 }
 
-Dubai.getCustPerHour();
-console.log(Dubai);
+makeHeaderRow();
+const seattle = new CookieStore("Seattle", 23, 65, 6.3);
+const tokyo = new CookieStore("Tokyo", 3, 24, 1.2);
+const dubai = new CookieStore("Dubai", 11, 38, 3.7);
+const paris = new CookieStore("Paris", 20, 38, 2.3);
+const lima = new CookieStore("Lima", 2, 16, 4.6);
 
-const Paris = {
-  name: "Paris",
-  minCust: 20,
-  maxCust: 38,
-  avgSale: 2.3,
-  custPerHour: [],
-  getCustPerHour: function () {
-    for (let i = 0; i < hours.length; i++);
-    let numCusts = randomNum(this.minCust, this.maxCust);
-    this.custPerHour.push(numCusts);
-  },
-};
-
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-Paris.getCustPerHour();
-console.log(Paris);
-
-const Lima = {
-  name: "Lima",
-  minCust: 2,
-  maxCust: 16,
-  avgSale: 4.6,
-  custPerHour: [],
-  getCustPerHour: function () {
-    for (let i = 0; i < hours.length; i++);
-    let numCusts = randomNum(this.minCust, this.maxCust);
-    this.custPerHour.push(numCusts);
-  },
-};
-
-function randomNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-Lima.getCustPerHour();
-console.log(Lima);
-
-let data = ["seattle", "tokyo", "dubai", "lima", "paris"];
-let list = document.getElementById("myList");
-for (i = 0; i < data.length; i++) {
-  let li = document.createElement("li");
-  li.innerText = data[i];
-  list.appendChild(li);
-}
+seattle.render();
+tokyo.render();
+dubai.render();
+paris.render();
+lima.render();
